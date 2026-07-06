@@ -1,0 +1,76 @@
+{
+  "name": "eslint-plugin-nava",
+  "version": "0.1.0",
+  "description": "An opinionated ESLint plugin for TypeScript projects that enforces clean code conventions, import organization, type safety patterns, and consistent module structure.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "typescript",
+    "lint",
+    "clean-code"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./recommended": {
+      "types": "./dist/recommended.d.ts",
+      "import": "./dist/recommended.js"
+    },
+    "./configs/react": {
+      "types": "./dist/configs/react.d.ts",
+      "import": "./dist/configs/react.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint .",
+    "test": "node --test",
+    "publish:npm": "npm publish --access public"
+  },
+  "peerDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@typescript-eslint/utils": "^8.0.0",
+    "eslint": "^9.0.0",
+    "typescript-eslint": "^8.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@typescript-eslint/utils": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "eslint-plugin-perfectionist": "^4.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "prettier": "^3.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/utils": "^8.0.0",
+    "eslint": "^9.0.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "homepage": "https://github.com/nava-lint/nava-lint"
+}
+
+// ready for publish
+
+// publish with: npm publish --access public
