@@ -1,0 +1,8 @@
+node_modules
+src
+tests
+.github
+eslint.config.mjs
+tsconfig.json
+*.log
+.DS_Store
