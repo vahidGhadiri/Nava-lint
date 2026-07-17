@@ -122,3 +122,6 @@ Rules share a small sort helper in src/sort-utils.ts.
 
 ## Status
 - v0.1.0: initial release
+
+## Internals
+Rules share a small sort helper.
