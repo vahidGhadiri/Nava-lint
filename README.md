@@ -125,3 +125,6 @@ Rules share a small sort helper in src/sort-utils.ts.
 
 ## Internals
 Rules share a small sort helper.
+
+## Contributing
+See CONTRIBUTING.md for local setup.
