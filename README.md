@@ -128,3 +128,6 @@ Rules share a small sort helper.
 
 ## Contributing
 See CONTRIBUTING.md for local setup.
+
+## Migration
+See docs/migration.md to move from local rules.
