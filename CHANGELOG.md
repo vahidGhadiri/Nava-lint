@@ -15,3 +15,5 @@ All notable changes to `eslint-plugin-nava` are documented here.
 - CI publishes on GitHub Release.
 
 - CI publishes on GitHub Release.
+
+- CI publishes on GitHub Release.
