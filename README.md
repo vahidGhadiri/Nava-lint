@@ -1,30 +1,30 @@
 # @whydrf/eslint-plugin-nava
 
-یک ESLint plugin سلیقه‌ای (opinionated) برای پروژه‌های TypeScript که قراردادهای کدتمیز،
-مرتب‌سازی importها، الگوهای type-safety و ساختار یکنواخت ماژول‌ها را تحمیل می‌کند.
+An opinionated ESLint plugin for TypeScript projects that enforces clean-code conventions,
+import organization, type-safety patterns, and a consistent module structure.
 
-> نام قبلی `eslint-plugin-nava` به دلیل تداخل با پکیج موجود `eslint-plugin-ava` توسط npm رد
-> شد؛ لذا پکیج به صورت scoped منتشر شده است.
+> The original name `eslint-plugin-nava` was rejected by npm for being too similar to the
+> existing `eslint-plugin-ava`, so the package is published under the `@whydrf` scope.
 
 ---
 
-## چرا این پلاگین؟
+## Why this plugin?
 
-سه تا از قانون‌های اینجا کارهایی را انجام می‌دهند که با تنظیمات معمولی ESLint + TypeScript
-عملاً غیرممکن است:
+Three of the bundled rules do things that standard ESLint + TypeScript setups can't easily do:
 
-- **`no-inline-type-imports`** — قانون استاندارد `@typescript-eslint/consistent-type-imports`
-  وقتی `prefer: 'type-imports'` باشد، `import { type X }` را **گزارش نمی‌کند**، چون parser تایپ‌اسکریپت
-  آن را به `import type { X }` نرمال‌سازی می‌کند. این قانون در سطح متن (text-level) کار می‌کند و
-  حتی `import { type X, Y }` را به دو خط جداگانه می‌شکند و خودکار اصلاح (auto-fix) می‌کند.
-- **`multiline-type-literals`** — تحمیل می‌کند که type literalهای درون‌خطی (`type T = { a: string }`)
-  حتماً چندخطی باشند (خوانایی در تفاوت‌های git).
-- **`module-member-order`** — ترتیب declarationهای سطح بالای فایل را یکنواخت می‌کند:
+- **`no-inline-type-imports`** — The standard `@typescript-eslint/consistent-type-imports` rule
+  with `prefer: 'type-imports'` does **not** report `import { type X }`, because the TypeScript
+  parser normalizes it to `import type { X }`. This rule works at the text level, so it still
+  catches inline type imports, and even splits `import { type X, Y }` into separate type/value
+  imports with auto-fix.
+- **`multiline-type-literals`** — Enforces that inline object type literals
+  (`type T = { a: string }`) and interface bodies are always multiline (better git diffs).
+- **`module-member-order`** — Keeps top-level declarations in a consistent order:
   `imports → enum → type → interface → const`.
 
 ---
 
-## نصب
+## Installation
 
 ```bash
 # npm
@@ -37,28 +37,29 @@ pnpm add -D @whydrf/eslint-plugin-nava
 yarn add -D @whydrf/eslint-plugin-nava
 ```
 
-این پکیج peer dependency دارد؛ اگر در پروژه‌تان نصب نیستند، نصبشان کنید:
+This package has peer dependencies. Install them if they aren't already in your project:
 
 ```bash
 pnpm add -D eslint typescript typescript-eslint @eslint/js
 ```
 
-| Peer dependency             | نسخه     | اجباری؟ |
-| --------------------------- | -------- | ------- |
-| `eslint`                    | `^9.0.0` | بله     |
-| `typescript-eslint`         | `^8.0.0` | بله     |
-| `@eslint/js`                | `^9.0.0` | بله     |
-| `@typescript-eslint/utils`  | `^8.0.0` | اختیاری |
+| Peer dependency            | Version  | Required? |
+| -------------------------- | -------- | --------- |
+| `eslint`                   | `^9.0.0` | yes       |
+| `typescript-eslint`        | `^8.0.0` | yes       |
+| `@eslint/js`               | `^9.0.0` | yes       |
+| `@typescript-eslint/utils` | `^8.0.0` | optional  |
 
-> نیاز به ESLint نسخه ۹ (flat config) دارد.
+> Requires ESLint 9 (flat config).
 
 ---
 
-## استفاده سریع
+## Quick start
 
-### گزینه ۱ — فقط قانون‌ها (Recommended)
+### Option 1 — Rules only (Recommended)
 
-اگر می‌خواهید فقط سه قانون بالا + `consistent-type-imports` فعال شود و بقیه تنظیمات دست خودتان باشد:
+If you just want the three rules + `consistent-type-imports` enabled and keep the rest of your
+config under your control:
 
 ```js
 // eslint.config.js
@@ -68,21 +69,21 @@ export default [
     nava,
     {
         rules: {
-            // هر کدام را می‌خواهید بازنویسی (override) کنید
+            // override any rule here
             'nava/no-inline-type-imports': 'warn',
         },
     },
 ];
 ```
 
-### گزینه ۲ — کانفیگ کامل React
+### Option 2 — Full React config
 
-یک flat config آماده برای پروژه‌های React/TypeScript شامل:
+A ready-made flat config for React/TypeScript projects that includes:
 
-- قانون‌های خود پلاگین
-- `eslint-plugin-perfectionist` (مرتب‌سازی importها بر اساس طول خط)
-- `eslint-plugin-prettier` (فرمت با Prettier)
-- تنظیمات JSX، globals و غیرفعال‌سازی قانون‌های ناسازگار با React (مثل `react/react-in-jsx-scope`)
+- the plugin's own rules
+- `eslint-plugin-perfectionist` (import sorting by line length)
+- `eslint-plugin-prettier` (formatting via Prettier)
+- JSX settings, browser globals, and disabling React-incompatible rules like `react/react-in-jsx-scope`
 
 ```js
 // eslint.config.js
@@ -92,7 +93,7 @@ export default [
     ...navaReact,
     {
         rules: {
-            // مثال: بازنویسی گروه‌بندی importها
+            // example: override import grouping
             'perfectionist/sort-imports': [
                 'error',
                 {
@@ -111,7 +112,7 @@ export default [
 ];
 ```
 
-### گزینه ۳ — فقط یک قانون خاص
+### Option 3 — A single rule
 
 ```js
 // eslint.config.js
@@ -131,22 +132,22 @@ export default [
 
 ---
 
-## قانون‌ها (Rules)
+## Rules
 
 ### `nava/no-inline-type-imports` ⚠️ auto-fix
 
-اجازه نمی‌دهد `import { type X }` نوشته شود و آن را به `import type { X }` تبدیل می‌کند.
+Disallows `import { type X }` and enforces `import type { X }`.
 
 ```ts
-// ❌ غلط
+// ❌ wrong
 import { type Foo, bar } from './mod';
 
-// ✅ صحیح (auto-fix خودکار این را می‌سازد)
+// ✅ correct (auto-fix produces this)
 import type { Foo } from './mod';
 import { bar } from './mod';
 ```
 
-اگر فقط type داشته باشد، ساده تبدیل می‌شود:
+If the import only holds types, it is converted directly:
 
 ```ts
 // ❌
@@ -156,25 +157,25 @@ import { type Foo } from './mod';
 import type { Foo } from './mod';
 ```
 
-> نکته: این قانون در سطح متن عمل می‌کند، پس حتی وقتی parser تایپ‌اسکریپت inline type import
-> را نرمال می‌کند، باز هم آن را تشخیص داده و اصلاح می‌کند.
+> Note: this rule works at the text level, so it still detects and fixes inline type imports
+> even after the TypeScript parser has normalized them.
 
 ### `nava/multiline-type-literals` ⚠️ auto-fix
 
-تحمیل می‌کند type literalهای شیء درون‌خطی حتماً چندخطی باشند.
+Enforces that inline object type literals span multiple lines.
 
 ```ts
-// ❌ غلط
+// ❌ wrong
 type User = { id: string; name: string };
 
-// ✅ صحیح
+// ✅ correct
 type User = {
     id: string;
     name: string;
 };
 ```
 
-همین قانون برای بدنهٔ `interface` هم اعمال می‌شود:
+The same applies to `interface` bodies:
 
 ```ts
 // ❌
@@ -189,51 +190,52 @@ interface User {
 
 ### `nava/module-member-order` ⚠️ auto-fix
 
-ترتیب declarationهای سطح بالای فایل را بعد از بلوک importها تحمیل می‌کند:
+Enforces the order of top-level declarations (after the import block):
 
 ```
 imports → enum → type → interface → const
 ```
 
 ```ts
-// ❌ غلط (ترتیب به‌هم‌ریخته)
+// ❌ wrong (mixed up)
 const DEFAULTS = {};
 type Id = string;
 interface User {}
 
-// ✅ صحیح (auto-fix این را می‌سازد)
+// ✅ correct (auto-fix produces this)
 type Id = string;
 interface User {}
 const DEFAULTS = {};
 ```
 
-> قانون فقط بلوک اولِ declarationها (تا اولین چیزی که جزو این چهار دسته نیست) را بررسی می‌کند
-> و اگر بین آن‌ها کامنت باشد، برای جلوگیری از حذف کامنت auto-fix را اعمال نمی‌کند (فقط هشدار می‌دهد).
+> The rule only checks the leading block of declarations (up to the first statement that is not
+> one of these four kinds). If there are comments between them, auto-fix is skipped to avoid
+> dropping comments — only a report is emitted.
 
 ---
 
-## کانفیگ‌های ارائه‌شده
+## Provided configs
 
-| Export                              | توضیح                                                                 |
-| ----------------------------------- | --------------------------------------------------------------------- |
-| `@whydrf/eslint-plugin-nava/recommended`   | یک `Linter.Config` شامل سه قانون + `consistent-type-imports`.         |
-| `@whydrf/eslint-plugin-nava/configs/react` | آرایه‌ای از کانفیگ‌ها برای پروژهٔ React/TS (perfectionist + prettier). |
+| Export                                       | Description                                                          |
+| -------------------------------------------- | -------------------------------------------------------------------- |
+| `@whydrf/eslint-plugin-nava/recommended`     | A `Linter.Config` with the three rules + `consistent-type-imports`.  |
+| `@whydrf/eslint-plugin-nava/configs/react`   | An array of configs for React/TS projects (perfectionist + prettier).|
 
 ---
 
-## اجرا و Auto-fix
+## Running and auto-fixing
 
 ```bash
-# فقط بررسی (lint)
+# lint only
 pnpm eslint .
 
-# بررسی + اصلاح خودکار
+# lint + auto-fix
 pnpm eslint . --fix
 ```
 
-### تنظیم VS Code برای اصلاح خودکار هنگام ذخیره (on-save)
+### VS Code on-save auto-fix
 
-فایل `.vscode/settings.json`:
+`.vscode/settings.json`:
 
 ```json
 {
@@ -246,44 +248,43 @@ pnpm eslint . --fix
 }
 ```
 
-با این تنظیم، خطاها به صورت زنده در ادیتور نشان داده می‌شوند و با هر بار ذخیره (`Ctrl/Cmd+S`)
-به طور خودکار اصلاح می‌شوند.
+With this setup, errors are shown live in the editor and fixed automatically on every save
+(`Ctrl/Cmd+S`).
 
 ---
 
-## مثال‌های آماده (Examples)
+## Ready-made examples
 
-در پوشهٔ [`examples/`](./examples) دو فایل کانفیگ کامل آماده شده است که می‌توانید مستقیماً
-کپی کنید:
+The [`examples/`](./examples) folder contains two complete, copy-paste-ready config files:
 
 - [`examples/eslint.config.recommended.mjs`](./examples/eslint.config.recommended.mjs)
 - [`examples/eslint.config.react.mjs`](./examples/eslint.config.react.mjs)
 
 ---
 
-## سوالات متداول (FAQ)
+## FAQ
 
-**آیا با Prettier تداخل دارد؟**
-کانفیگ `react` شامل `prettier/prettier` است، پس Prettier به عنوان قانون ESLint اجرا می‌شود
-و تداخلی ندارد. در کانفیگ `recommended` خودتان باید Prettier را جدا تنظیم کنید.
+**Does it conflict with Prettier?**
+The `react` config includes `prettier/prettier`, so Prettier runs as an ESLint rule with no
+conflict. In the `recommended` config you set up Prettier separately.
 
-**چرا اسم scoped است؟**
-نام `eslint-plugin-nava` توسط npm به دلیل شباهت به `eslint-plugin-ava` رد شد؛ لذا از
-`@whydrf/eslint-plugin-nava` استفاده می‌شود.
+**Why is the name scoped?**
+`eslint-plugin-nava` was rejected by npm for being too similar to `eslint-plugin-ava`, so the
+package is published as `@whydrf/eslint-plugin-nava`.
 
-**آیا قانون‌ها قابل غیرفعال‌سازی تکی هستند؟**
-بله. بعد از import کردن کانفیگ، هر قانون را می‌توانید با `"off"` یا سطح دلخواه بازنویسی کنید.
+**Can individual rules be turned off?**
+Yes. After importing a config, override any rule with `"off"` or your preferred severity.
 
 ---
 
-## لینک‌های بیشتر
+## Further reading
 
-- [راهنمای مهاجرت (Migration)](./docs/migration.md)
-- [نکات استفاده (Tips)](./docs/tips.md)
-- [مشارکت (Contributing)](./CONTRIBUTING.md)
-- [امنیت (Security)](./SECURITY.md)
-- [تغییرات (Changelog)](./CHANGELOG.md)
+- [Migration guide](./docs/migration.md)
+- [Usage tips](./docs/tips.md)
+- [Contributing](./CONTRIBUTING.md)
+- [Security](./SECURITY.md)
+- [Changelog](./CHANGELOG.md)
 
-## لایسنس
+## License
 
 [MIT](./LICENSE)
