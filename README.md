@@ -1,4 +1,4 @@
-# eslint-plugin-nava
+# @whydrf/eslint-plugin-nava
 
 An opinionated ESLint plugin for TypeScript projects that enforces clean code conventions, import organization, type safety patterns, and consistent module structure.
 
@@ -18,9 +18,9 @@ Bundled configurations:
 ## Installation
 
 ```bash
-npm install --save-dev eslint-plugin-nava
+npm install --save-dev @whydrf/eslint-plugin-nava
 # or
-pnpm add -D eslint-plugin-nava
+pnpm add -D @whydrf/eslint-plugin-nava
 ```
 
 `eslint` and `typescript-eslint` are peer dependencies and must be installed in your project.
@@ -32,7 +32,7 @@ pnpm add -D eslint-plugin-nava
 In your `eslint.config.js` / `eslint.config.mjs`:
 
 ```js
-import nava from 'eslint-plugin-nava/recommended';
+import nava from '@whydrf/eslint-plugin-nava/recommended';
 
 export default [
     nava,
@@ -48,7 +48,7 @@ export default [
 ### Full React config
 
 ```js
-import navaReact from 'eslint-plugin-nava/configs/react';
+import navaReact from '@whydrf/eslint-plugin-nava/configs/react';
 
 export default [
     ...navaReact,
@@ -76,7 +76,7 @@ export default [
 ### Single rule
 
 ```js
-import nava from 'eslint-plugin-nava';
+import nava from '@whydrf/eslint-plugin-nava';
 
 export default [
     {
